@@ -9,13 +9,15 @@
     <Authors>DCoats</Authors>
     <Company>Functionairy</Company>
     <Copyright>Copyright © Functionairy 2025</Copyright>
-    <Description>LibGit2Sharp-based GitOperator library.</Description>
+    <Description>Explorations sub-library for the F10Y.L0025 LibGit2Sharp-based GitOperator library.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <RepositoryUrl>https://github.com/Functionairy/F10Y.L0025.git</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\F10Y.NG0004\source\F10Y.NG0004\F10Y.NG0004.csproj" />
-    <ProjectReference Include="..\..\..\F10Y.L0080\source\F10Y.L0080\F10Y.L0080.csproj" />
+    <ProjectReference Include="..\..\..\F10Y.L0000\source\F10Y.L0000\F10Y.L0000.csproj" />
+    <ProjectReference Include="..\F10Y.L0025\F10Y.L0025.csproj" />
+    <ProjectReference Include="..\..\..\F10Y.L0019\source\F10Y.L0019\F10Y.L0019.csproj" />
+    <ProjectReference Include="..\..\..\F10Y.T0006\source\F10Y.T0006\F10Y.T0006.csproj" />
+    <ProjectReference Include="..\..\..\F10Y.L0004\source\F10Y.L0004.L000\F10Y.L0004.L000.csproj" />
   </ItemGroup>
 </Project>
