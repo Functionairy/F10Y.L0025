@@ -10,11 +10,14 @@ namespace F10Y.L0025
         public static ICredentialsOperator CredentialsOperator => L0025.CredentialsOperator.Instance;
         public static IFetchOptionsOperator FetchOptionsOperator => L0025.FetchOptionsOperator.Instance;
         public static ILibGit2SharpOperator LibGit2SharpOperator => L0025.LibGit2SharpOperator.Instance;
+        public static L0000.INowOperator NowOperator => L0000.NowOperator.Instance;
         public static L0000.INullOperator NullOperator => L0000.NullOperator.Instance;
         public static L0000.IPathOperator PathOperator => L0000.PathOperator.Instance;
+        public static IPushOptionsOperator PushOptionsOperator => L0025.PushOptionsOperator.Instance;
         public static IRemoteNames RemoteNames => L0025.RemoteNames.Instance;
         public static IRemoteOperator RemoteOperator => L0025.RemoteOperator.Instance;
         public static IRepositoryOperator RepositoryOperator => L0025.RepositoryOperator.Instance;
+        public static ISignatureOperator SignatureOperator => L0025.SignatureOperator.Instance;
         public static IValues Values => L0025.Values.Instance;
     }
 }

@@ -21,7 +21,7 @@ namespace F10Y.L0025
         /// Quality-of-life forward for <see cref="ILibGit2SharpOperator.Clone_NonIdempotent(string, string, string, string)"/>.
         /// </remarks>
         [InstanceIdentity("E42F0A64-ABC8-4FB8-88CD-C331BA196A9C")]
-        public string Clone_NonIdempotent(
+        string Clone_NonIdempotent(
             string sourceUrl,
             string repositoryDirectoryPath,
             string username,
@@ -37,7 +37,7 @@ namespace F10Y.L0025
         }
 
         [InstanceIdentity("5211E6C4-8EF9-4624-9DD2-DFA6DF2C059D")]
-        public void Fetch_Remote(
+        void Fetch_Remote(
             string repositoryDirectoryPath,
             string username,
             string password)
@@ -46,7 +46,7 @@ namespace F10Y.L0025
                 username,
                 password);
 
-        public string Get_RepositoryDirectoryPath(string path)
+        string Get_RepositoryDirectoryPath(string path)
         {
             var wasFound = this.Has_Repository(
                 path,
@@ -61,13 +61,13 @@ namespace F10Y.L0025
         }
 
         [InstanceIdentity("DCDCF69B-AADA-49FE-A7B0-FF19D44D6A9C")]
-        public string Get_Repository_RemoteUrl(string path_InRepositoryDirectory)
+        string Get_Repository_RemoteUrl(string path_InRepositoryDirectory)
         {
             var output = Instances.LibGit2SharpOperator.Get_Repository_RemoteUrl(path_InRepositoryDirectory);
             return output;
         }
 
-        public DateTimeOffset Get_LatestCommit_Timestamp(string repositoryDirectoryPath)
+        DateTimeOffset Get_LatestCommit_Timestamp(string repositoryDirectoryPath)
         {
             var output = Instances.LibGit2SharpOperator.Get_LatestCommit_Timestamp(repositoryDirectoryPath);
             return output;
@@ -77,7 +77,7 @@ namespace F10Y.L0025
         /// Returns the <inheritdoc cref="Glossary.For_Directories.RepositoryDirectory" path="/name"/> path given a file or directory path from within the repository,
         /// or null if not found.
         /// </summary>
-        public bool Has_Repository(
+        bool Has_Repository(
             string path,
             out string repositoryDirectoryPath_OrNotFound)
         {
@@ -96,7 +96,7 @@ namespace F10Y.L0025
         /// <summary>
         /// Returns the <inheritdoc cref="Glossary.For_Directories.RepositoryGitDirectory" path="/name"/> path, or null if no repository is found, or null if not found.
         /// </summary>
-        public bool Has_Repository_GitDirectory(
+        bool Has_Repository_GitDirectory(
             string path,
             out string gitDirectoryPath_OrNotFound)
         {
@@ -108,35 +108,35 @@ namespace F10Y.L0025
         }
 
         [InstanceIdentity("580CEF21-1323-4B78-87A3-554C8432F944")]
-        public bool Has_UnpulledChanges_WithoutFetch(string repositoryDirectoryPath)
+        bool Has_UnpulledChanges_WithoutFetch(string repositoryDirectoryPath)
             => Instances.RepositoryOperator.Has_UnpulledChanges_WithoutFetch(repositoryDirectoryPath);
 
         [InstanceIdentity("74DDE904-5EA5-4B24-A18C-5369CF08123D")]
-        public bool Has_UnpushedChanges(string repositoryDirectoryPath)
+        bool Has_UnpushedChanges(string repositoryDirectoryPath)
             => Instances.LibGit2SharpOperator.Has_UnpushedChanges(repositoryDirectoryPath);
 
-        public void In_RepositoryContext(
+        void In_RepositoryContext(
             string repositoryDirectoryPath,
             Action<Repository> repositoryAction)
             => Instances.RepositoryOperator.In_RepositoryContext(
                 repositoryDirectoryPath,
                 repositoryAction);
 
-        public TOut In_RepositoryContext<TOut>(
+        TOut In_RepositoryContext<TOut>(
             string repositoryDirectoryPath,
             Func<Repository, TOut> repositoryAction)
             => Instances.RepositoryOperator.In_RepositoryContext(
                 repositoryDirectoryPath,
                 repositoryAction);
 
-        public Task In_RepositoryContext<TOut>(
+        Task In_RepositoryContext<TOut>(
             string repositoryDirectoryPath,
             Func<Repository, Task> repositoryAction)
             => Instances.RepositoryOperator.In_RepositoryContext(
                 repositoryDirectoryPath,
                 repositoryAction);
 
-        public Task<TOut> In_RepositoryContext<TOut>(
+        Task<TOut> In_RepositoryContext<TOut>(
             string repositoryDirectoryPath,
             Func<Repository, Task<TOut>> repositoryAction)
             => Instances.RepositoryOperator.In_RepositoryContext(
@@ -145,11 +145,11 @@ namespace F10Y.L0025
 
         /// <inheritdoc cref="IRepositoryOperator.Is_Repository(string)"/>
         [InstanceIdentity("F79C2884-3BF8-4F73-AB28-B011FD6CF371")]
-        public bool Is_GitRepository(string directoryPath)
+        bool Is_GitRepository(string directoryPath)
            => Instances.RepositoryOperator.Is_Repository(directoryPath);
 
         [InstanceIdentity("8E3D6176-CCEA-4537-AE25-A2F2299D2AC9")]
-        public void Pull_WithoutFetch(
+        void Pull_WithoutFetch(
             string repositoryDirectoryPath,
             string authorName,
             string authorEmail)
