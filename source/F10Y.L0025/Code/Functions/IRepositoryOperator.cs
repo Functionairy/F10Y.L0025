@@ -11,6 +11,12 @@ using F10Y.T0011;
 
 namespace F10Y.L0025
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// <inheritdoc cref="Documentation.Project_SelfDescription" path="/summary"/>
+    /// </remarks>
     [FunctionsMarker]
     public partial interface IRepositoryOperator
     {
@@ -42,8 +48,8 @@ namespace F10Y.L0025
             if (hasAnyToCommit)
             {
                 var authorSignature = Instances.SignatureOperator.Get_Signature(
-                authorName,
-                authorEmailAddress);
+                    authorName,
+                    authorEmailAddress);
 
                 var committerSignature = authorSignature;
 
@@ -207,6 +213,7 @@ namespace F10Y.L0025
             return output;
         }
 
+        /// <inheritdoc cref="RepositoryInformation.Path"/>
         [InstanceIdentity("5D280D1E-3457-4608-8831-C8BBDAED86CA")]
         string Get_GitDirectoryPath(Repository repository)
             => repository.Info.Path;
@@ -247,6 +254,19 @@ namespace F10Y.L0025
             var output = new Repository(repositoryDirectoryPath);
             return output;
         }
+
+        Repository Get_Repository_FromPathInRepositoryDirectory(string path_InRepositoryDirectory)
+        {
+            var repositoryDirectoryPath = this.Discover_RepositoryDirectoryPath(path_InRepositoryDirectory);
+
+            var repository = this.Get_Repository(repositoryDirectoryPath);
+
+            return repository;
+        }
+
+        /// <inheritdoc cref="RepositoryInformation.WorkingDirectory"/>
+        string Get_WorkingDirectoryPath(Repository repository)
+            => repository.Info.WorkingDirectory;
 
         [InstanceIdentity("92DB0D0D-72DD-4643-AD12-F18B32C68AC6")]
         bool Has_Branch(
@@ -325,23 +345,72 @@ namespace F10Y.L0025
         bool Has_UnpushedChanges(Repository repository)
         {
             // Are there any differenced or staged files in the working copy?
-            var anyDifferencedOrStagedFiles = this.Enumerate_DifferencedOrStaged_RelativeFilePaths(repository)
+            var any_DifferencedOrStagedFiles = this.Enumerate_DifferencedOrStaged_RelativeFilePaths(repository)
                 .Any();
 
-            if (anyDifferencedOrStagedFiles)
+            if (any_DifferencedOrStagedFiles)
             {
                 return true;
             }
 
-            var anyOnlyUnpushedChanges = this.Has_OnlyUnpushedChanges(repository);
-            if (anyOnlyUnpushedChanges)
+            var has_OnlyUnpushedChanges = this.Has_OnlyUnpushedChanges(repository);
+            if (has_OnlyUnpushedChanges)
             {
                 return true;
             }
 
             // Finally, return false since there are no unpushed changes.
             return false;
-        } 
+        }
+
+        [InstanceIdentity("18F88633-3C0A-4AC5-BD2A-89B9DCBF6F73")]
+        bool Has_UnpushedChanges(
+            Repository repository,
+            out UnpushedChangesResult result)
+        {
+            var status = this.Get_Status(repository);
+
+            var is_Dirty = Instances.RepositoryStatusOperator.Get_IsDirty(status);
+            var any_Stashes = this.Get_AnyStashes(repository);
+            var is_AheadOfRemote = this.Is_AheadOfRemote(repository);
+            var any_Untracked_AndNotIgnored = Instances.RepositoryStatusOperator.Any_Untracked(status);
+
+            var has_UnpushedChanges = Instances.RepositoryStatusOperator.Has_UnpushedChanges(
+                is_Dirty,
+                any_Stashes,
+                is_AheadOfRemote,
+                any_Untracked_AndNotIgnored);
+
+            result = new()
+            {
+                Has_UnpushedChanges = has_UnpushedChanges,
+
+                Is_Dirty = is_Dirty,
+                Any_Stashes = any_Stashes,
+                Is_AheadOfRemote = is_AheadOfRemote,
+                Any_Untracked_AndNotIgnored = any_Untracked_AndNotIgnored
+            };
+
+            return has_UnpushedChanges;
+        }
+
+        bool Is_AheadOfRemote(Repository repository)
+        {
+            var branch_Head = this.Get_Head(repository);
+
+            var output = Instances.BranchOperator.Is_AheadOfRemote(branch_Head);
+            return output;
+        }
+
+        Branch Get_Head(Repository repository)
+            => repository.Head;
+
+        bool Get_AnyStashes(Repository repository)
+            => repository.Stashes.Any();
+
+        /// <inheritdoc cref="RepositoryExtensions.RetrieveStatus(IRepository)"/>
+        RepositoryStatus Get_Status(Repository repository)
+            => repository.RetrieveStatus();
 
         /// <inheritdoc cref="Has_UnpushedChanges(Repository)"/>
         // Prior work in R5T.D0038.L0001.
@@ -351,6 +420,20 @@ namespace F10Y.L0025
             using var repository = this.Get_Repository(repositoryDirectoryPath);
 
             var output = this.Has_UnpushedChanges(repository);
+            return output;
+        }
+
+        [InstanceIdentity("CDDEC659-03F3-4BA7-8948-FADE08465F9B")]
+        bool Has_UnpushedChanges(
+            string repositoryDirectoryPath,
+            out UnpushedChangesResult result)
+        {
+            using var repository = this.Get_Repository(repositoryDirectoryPath);
+
+            var output = this.Has_UnpushedChanges(
+                repository,
+                out result);
+
             return output;
         }
 

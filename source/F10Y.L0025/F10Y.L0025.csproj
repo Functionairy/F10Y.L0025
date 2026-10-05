@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup Label="Main">
     <TargetFramework>net8.0</TargetFramework>
-    <NoWarn>CS1573;CS1587;CS1591;IDE0130</NoWarn>
+    <NoWarn>CS1573;CS1587;CS1591;IDE0130;IDE0305</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup Label="Package">
@@ -15,7 +15,10 @@
     <RepositoryUrl>https://github.com/Functionairy/F10Y.L0025.git</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\F10Y.L0001\source\F10Y.L0001.L000\F10Y.L0001.L000.csproj" />
+    <ProjectReference Include="..\..\..\F10Y.L0001\source\F10Y.L0001.X000\F10Y.L0001.X000.csproj" />
     <ProjectReference Include="..\..\..\F10Y.NG0004\source\F10Y.NG0004\F10Y.NG0004.csproj" />
     <ProjectReference Include="..\..\..\F10Y.L0080\source\F10Y.L0080\F10Y.L0080.csproj" />
+    <ProjectReference Include="..\..\..\F10Y.T0004\source\F10Y.T0004\F10Y.T0004.csproj" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 using LibGit2Sharp;
@@ -73,6 +75,37 @@ namespace F10Y.L0025
             return output;
         }
 
+        string[] Get_LocalRepositoriesWithUnpushedChanges(
+            IList<string> repositoryDirectoryPaths,
+            TextWriter outputWriter)
+        {
+            var count = repositoryDirectoryPaths.Count;
+            var index = 1;
+
+            var repositoriesWithChanges = new List<string>();
+
+            foreach (var repositoryDirectoryPath in repositoryDirectoryPaths)
+            {
+                outputWriter.WriteLine($"{index++}/{count} {repositoryDirectoryPath}");
+
+                var isRepository = this.Is_GitRepository(repositoryDirectoryPath);
+                if (!isRepository)
+                {
+                    outputWriter.WriteLine("Not a Git repository.");
+
+                    continue;
+                }
+
+                var hasUnpushedChanges = this.Has_UnpushedChanges(repositoryDirectoryPath);
+                if (hasUnpushedChanges)
+                {
+                    repositoriesWithChanges.Add(repositoryDirectoryPath);
+                }
+            }
+
+            return repositoriesWithChanges.ToArray();
+        }
+
         /// <summary>
         /// Returns the <inheritdoc cref="Glossary.For_Directories.RepositoryDirectory" path="/name"/> path given a file or directory path from within the repository,
         /// or null if not found.
@@ -114,6 +147,14 @@ namespace F10Y.L0025
         [InstanceIdentity("74DDE904-5EA5-4B24-A18C-5369CF08123D")]
         bool Has_UnpushedChanges(string repositoryDirectoryPath)
             => Instances.LibGit2SharpOperator.Has_UnpushedChanges(repositoryDirectoryPath);
+
+        [InstanceIdentity("74DDE904-5EA5-4B24-A18C-5369CF08123D")]
+        bool Has_UnpushedChanges(
+            string repositoryDirectoryPath,
+            out UnpushedChangesResult result)
+            => Instances.LibGit2SharpOperator.Has_UnpushedChanges(
+                repositoryDirectoryPath,
+                out result);
 
         void In_RepositoryContext(
             string repositoryDirectoryPath,
@@ -157,5 +198,41 @@ namespace F10Y.L0025
                 repositoryDirectoryPath,
                 authorName,
                 authorEmail);
+
+        /// <summary>
+        /// Chooses <see cref="Push_WithStageAndCommit(string, string, string, string, string, string)"/> as the default.
+        /// </summary>
+        void Push(
+            string repositoryDirectoryPath,
+            string commitMessage,
+            string authorName,
+            string authorEmailAddress,
+            string username,
+            string password)
+            => this.Push_WithStageAndCommit(
+                repositoryDirectoryPath,
+                commitMessage,
+                authorName,
+                authorEmailAddress,
+                username,
+                password);
+
+        /// <summary>
+        /// As opposed to <see cref="Push_WithStageAndCommit(string, string, string, string, string, string)"/>, this method stages, commits, and pushes changes.
+        /// </summary>
+        public void Push_WithStageAndCommit(
+            string repositoryDirectoryPath,
+            string commitMessage,
+            string authorName,
+            string authorEmailAddress,
+            string username,
+            string password)
+            => Instances.LibGit2SharpOperator.Push_WithStageAndCommit(
+                repositoryDirectoryPath,
+                commitMessage,
+                authorName,
+                authorEmailAddress,
+                username,
+                password);
     }
 }

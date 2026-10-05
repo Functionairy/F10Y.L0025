@@ -8,6 +8,12 @@ using F10Y.T0011;
 
 namespace F10Y.L0025
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// <inheritdoc cref="Documentation.Project_SelfDescription" path="/summary"/>
+    /// </remarks>
     [FunctionsMarker]
     public partial interface ILibGit2SharpOperator
     {
@@ -50,11 +56,12 @@ namespace F10Y.L0025
             return output;
         }
 
-        string Get_Remote_Origin_Url(string pathInRepositoryDirectory)
-        {
-            var repositoryDirectoryPath = Instances.RepositoryOperator.Discover_RepositoryDirectoryPath(pathInRepositoryDirectory);
+        Repository Get_Repository(string path_InRepositoryDirectory)
+            => Instances.RepositoryOperator.Get_Repository_FromPathInRepositoryDirectory(path_InRepositoryDirectory);
 
-            using var repository = Instances.RepositoryOperator.Get_Repository(repositoryDirectoryPath);
+        string Get_Remote_Origin_Url(string path_InRepositoryDirectory)
+        {
+            using var repository = this.Get_Repository(path_InRepositoryDirectory);
 
             var originRemoteUrl = Instances.RepositoryOperator.Get_Remote_Origin_Url(repository);
             return originRemoteUrl;
@@ -73,6 +80,33 @@ namespace F10Y.L0025
         [InstanceIdentity("0FACB49E-7A27-42B7-B678-473F16355789")]
         bool Has_UnpushedChanges(string repositoryDirectoryPath)
             => Instances.RepositoryOperator.Has_UnpushedChanges(repositoryDirectoryPath);
+
+        [InstanceIdentity("0FACB49E-7A27-42B7-B678-473F16355789")]
+        bool Has_UnpushedChanges(
+            string repositoryDirectoryPath,
+            out UnpushedChangesResult result)
+            => Instances.RepositoryOperator.Has_UnpushedChanges(
+                repositoryDirectoryPath,
+                out result);
+
+        void In_RepositoryContext(
+            string path_InRepositoryDirectory,
+            Action<Repository> action)
+        {
+            using var repository = this.Get_Repository(path_InRepositoryDirectory);
+
+            action(repository);
+        }
+
+        TOut In_RepositoryContext<TOut>(
+            string path_InRepositoryDirectory,
+            Func<Repository, TOut> function)
+        {
+            using var repository = this.Get_Repository(path_InRepositoryDirectory);
+
+            var output = function(repository);
+            return output;
+        }
 
         bool Push_WithStageAndCommit(
             string repositoryDirectoryPath,
