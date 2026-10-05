@@ -68,9 +68,13 @@ namespace F10Y.L0025
 
         bool Has_AnyStaged(Repository repository)
         {
-            var output = repository.Index
-                .Where(x => x.StageLevel == StageLevel.Staged)
-                .Any();
+            var status = this.Get_Status(repository);
+
+            var output = status.Staged.Any();
+
+            //var output = repository.Index
+            //    .Where(x => x.StageLevel == StageLevel.Staged)
+            //    .Any();
 
             return output;
         }
